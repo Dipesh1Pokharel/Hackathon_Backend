@@ -186,6 +186,33 @@ app.post('/chatBot', async(req, res) => {
           console.error(error);
       }
     });
+    //EVENTS API
+
+    app.get('/api/events/:name', async(req, res) => {
+        const name = req.params.name;
+        // console.log(name);
+        const options = {
+          method: 'GET',
+          url: 'https://real-time-events-search.p.rapidapi.com/search-events',
+          params: {
+            query: `Environment Programs in ${name}`,
+            start: '0'
+          },
+          headers: {
+            'X-RapidAPI-Key': 'f8cd9c8bd9msh6e6d921717b0838p13ad61jsnc3c23603d782',
+            'X-RapidAPI-Host': 'real-time-events-search.p.rapidapi.com'
+          }
+        };
+      
+        try {
+          const response = await axios.request(options);
+          // console.log(response.data);
+          res.json(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      })
+      
 
 
 
