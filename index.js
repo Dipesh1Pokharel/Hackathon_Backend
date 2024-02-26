@@ -120,8 +120,72 @@ app.use('/updateProducts/:documentId', async (req, res)=>{
         res.status(500).send("Internal Server Error.");
     }
 });
+//api for events of environmenmt programss
 
+app.get('/api/events/:name', async(req, res) => {
+  const name = req.params.name;
+  // console.log(name);
+  const options = {
+    method: 'GET',
+    url: 'https://real-time-events-search.p.rapidapi.com/search-events',
+    params: {
+      query: `Environment Programs in ${name}`,
+      start: '0'
+    },
+    headers: {
+      'X-RapidAPI-Key': 'f8cd9c8bd9msh6e6d921717b0838p13ad61jsnc3c23603d782',
+      'X-RapidAPI-Host': 'real-time-events-search.p.rapidapi.com'
+    }
+  };
 
+  try {
+    const response = await axios.request(options);
+    // console.log(response.data);
+    res.json(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+//Chat GPT API
+app.post('/chatBot', async(req, res) => {
+    // const name = req.params.name;
+    const prompt = JSON.stringify(req.body);
+    const data = "you are required to answer the questions related to only environment and climate"+ prompt;
+    
+    // console.log(name);
+    const options = {
+        method: 'POST',
+        url: 'https://open-ai21.p.rapidapi.com/conversationgpt35',
+        headers: {
+          'content-type': 'application/json',
+          'X-RapidAPI-Key': 'f8cd9c8bd9msh6e6d921717b0838p13ad61jsnc3c23603d782',
+          'X-RapidAPI-Host': 'open-ai21.p.rapidapi.com'
+        },
+        data: {
+          messages: [
+            {
+              role: 'user',
+              content: data
+            }
+          ],
+          web_access: false,
+          system_prompt: '',
+          temperature: 0.9,
+          top_k: 5,
+          top_p: 0.9,
+          max_tokens: 256
+        }
+      };
+      
+      try {
+          const response = await axios.request(options);
+        //   console.log(response.data);
+        res.send(response.data);
+      } catch (error) {
+          console.error(error);
+      }
+    });
 
 
 
