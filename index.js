@@ -20,6 +20,22 @@ app.use(bodyParser.json({limit: '10000mb'}));
 
 
 //GET PRODUCTS
+app.use('/getProducts/:id', async (req, res)=>{
+    try{
+        const id = req.params.id;
+        const response = await axios.get(`https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/market_place/${id}`,
+        {
+            headers:{
+                "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325"
+            }
+        });
+        res.json(response.data);
+
+    }
+    catch(err){
+        res.status(500).send("Internal Server Error.");
+    }
+});
 app.use('/getProducts', async (req, res)=>{
     try{
         const response = await axios.get('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/market_place',
@@ -134,7 +150,7 @@ app.get('/api/events/:city', async(req, res) => {
       start: '0'
     },
     headers: {
-      'X-RapidAPI-Key': 'f8cd9c8bd9msh6e6d921717b0838p13ad61jsnc3c23603d782',
+      'X-RapidAPI-Key': '143ed076admsh713fdc410f5912bp1941ccjsn02ae25de5938',
       'X-RapidAPI-Host': 'real-time-events-search.p.rapidapi.com'
     }
   };
@@ -218,7 +234,7 @@ app.get("/api/news", async(req, res)=>{
 app.use('/report', upload.single('image') ,async(req, res)=>{
     try{
         // Extract product data from request body
-     const productData = req.body;
+     const reportData = req.body;
      
      // Extract image buffer from the request file
      const imageBuffer = req.file.buffer;
@@ -227,11 +243,11 @@ app.use('/report', upload.single('image') ,async(req, res)=>{
      const base64Image = imageBuffer.toString('base64');
  
      // Add base64 image to product data
-     productData.image = base64Image;
+     reportData.image = base64Image;
  
      // Send product data to DataStax database
-       const response = await axios.post('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/market_place',
-        productData,
+       const response = await axios.post('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/reports',
+        reportData,
        {
            headers:{
                "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325",
@@ -246,6 +262,24 @@ app.use('/report', upload.single('image') ,async(req, res)=>{
        console.log(err);
    }
 
+});
+
+//GET REPORTS
+
+app.use('/getReports', async(req, res)=>{
+    try{
+        const response = await axios.get('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/reports?page-size=3', {
+            headers:{
+                "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325"
+
+            }
+        });
+        res.json(express.response.data);
+
+    }
+    catch{
+
+    }
 })
 
 
