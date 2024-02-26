@@ -12,6 +12,8 @@ const PORT = 4000;
 app.use(cors());
 app.use(bodyParser.json({limit: '1000mb'}));
 
+console.log("chsdhv");
+
 app.listen(PORT, ()=>{
     console.log("Server Started");
 })
