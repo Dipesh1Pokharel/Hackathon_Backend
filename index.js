@@ -11,12 +11,12 @@ const PORT = 4000;
 const storage = multer.memoryStorage();
 const upload =  multer({
     storge: storage,
-    limits : {fileSize: 10000000000}
+    limits : {fileSize: 1000 *1024 * 1024}
   });
   const router = express.Router();
 
 app.use(cors());
-app.use(bodyParser.json({limit: '1000mb'}));
+app.use(bodyParser.json({limit: '10000mb'}));
 
 
 //GET PRODUCTS
@@ -64,7 +64,8 @@ app.use('/addProducts', upload.single('image'), async (req, res)=>{
 
     }
     catch(err){
-        res.status(500).send("Internal Server Error.");
+        // res.status(500).send("Internal Server Error.");
+        console.log(err);
     }
 });
 
@@ -123,7 +124,7 @@ app.use('/updateProducts/:documentId', async (req, res)=>{
 //api for events of environmenmt programss
 
 app.get('/api/events/:city', async(req, res) => {
-  const city = req.params.name;
+  const city = req.params.city;
   // console.log(name);
   const options = {
     method: 'GET',
@@ -188,31 +189,7 @@ app.post('/chatBot', async(req, res) => {
     });
     //EVENTS API
 
-    app.get('/api/events/:name', async(req, res) => {
-        const name = req.params.name;
-        // console.log(name);
-        const options = {
-          method: 'GET',
-          url: 'https://real-time-events-search.p.rapidapi.com/search-events',
-          params: {
-            query: `Environment Programs in ${name}`,
-            start: '0'
-          },
-          headers: {
-            'X-RapidAPI-Key': 'f8cd9c8bd9msh6e6d921717b0838p13ad61jsnc3c23603d782',
-            'X-RapidAPI-Host': 'real-time-events-search.p.rapidapi.com'
-          }
-        };
-      
-        try {
-          const response = await axios.request(options);
-          // console.log(response.data);
-          res.json(response.data);
-        } catch (error) {
-          console.error(error);
-        }
-      });
-
+   
 //Get NEWS
 
 app.get("/api/news", async(req, res)=>{
@@ -235,8 +212,43 @@ app.get("/api/news", async(req, res)=>{
         } catch (error) {
           console.error(error);
       }
+});
+
+//Report APi
+app.use('/report', upload.single('image') ,async(req, res)=>{
+    try{
+        // Extract product data from request body
+     const productData = req.body;
+     
+     // Extract image buffer from the request file
+     const imageBuffer = req.file.buffer;
+     
+     // Encode image buffer to base64
+     const base64Image = imageBuffer.toString('base64');
+ 
+     // Add base64 image to product data
+     productData.image = base64Image;
+ 
+     // Send product data to DataStax database
+       const response = await axios.post('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/market_place',
+        productData,
+       {
+           headers:{
+               "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325",
+               "Content-Type": "application/json"
+           }
+       });
+       res.json(response.data);
+
+   }
+   catch(err){
+       // res.status(500).send("Internal Server Error.");
+       console.log(err);
+   }
+
 })
-      
+
+
 
 
 
