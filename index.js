@@ -211,7 +211,31 @@ app.post('/chatBot', async(req, res) => {
         } catch (error) {
           console.error(error);
         }
-      })
+      });
+
+//Get NEWS
+
+app.get("/api/news", async(req, res)=>{
+    const options = {
+        method: 'GET',
+        url: 'https://google-news13.p.rapidapi.com/search',
+        params: {
+          keyword: 'Environment, Climate and Climate change',
+          lr: 'en-US'
+        },
+        headers: {
+          'X-RapidAPI-Key': 'f8cd9c8bd9msh6e6d921717b0838p13ad61jsnc3c23603d782',
+          'X-RapidAPI-Host': 'google-news13.p.rapidapi.com'
+        }
+      };
+      
+      try {
+          const response = await axios.request(options);
+          res.send(response.data);
+        } catch (error) {
+          console.error(error);
+      }
+})
       
 
 
