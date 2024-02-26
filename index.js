@@ -122,14 +122,14 @@ app.use('/updateProducts/:documentId', async (req, res)=>{
 });
 //api for events of environmenmt programss
 
-app.get('/api/events/:name', async(req, res) => {
-  const name = req.params.name;
+app.get('/api/events/:city', async(req, res) => {
+  const city = req.params.name;
   // console.log(name);
   const options = {
     method: 'GET',
     url: 'https://real-time-events-search.p.rapidapi.com/search-events',
     params: {
-      query: `Environment Programs in ${name}`,
+      query: `Environment and Climate Seminars and Programmes in ${city}`,
       start: '0'
     },
     headers: {
