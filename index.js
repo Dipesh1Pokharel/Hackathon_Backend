@@ -38,7 +38,7 @@ app.use('/getProducts/:id', async (req, res)=>{
 });
 app.use('/getProducts', async (req, res)=>{
     try{
-        const response = await axios.get('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/market_place',
+        const response = await axios.get('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/market_place?page-size=3',
         {
             headers:{
                 "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325"
@@ -138,6 +138,7 @@ app.use('/updateProducts/:documentId', async (req, res)=>{
     }
 });
 //api for events of environmenmt programss
+//change api
 
 app.get('/api/events/:city', async(req, res) => {
   const city = req.params.city;
@@ -146,7 +147,7 @@ app.get('/api/events/:city', async(req, res) => {
     method: 'GET',
     url: 'https://real-time-events-search.p.rapidapi.com/search-events',
     params: {
-      query: `Environment and Climate Seminars and Programmes in ${city}`,
+      query: `Seminars and Programmes related to water pollution in ${city}`,
       start: '0'
     },
     headers: {
@@ -203,7 +204,7 @@ app.post('/chatBot', async(req, res) => {
           console.error(error);
       }
     });
-    //EVENTS API
+    
 
    
 //Get NEWS
@@ -213,7 +214,7 @@ app.get("/api/news", async(req, res)=>{
         method: 'GET',
         url: 'https://google-news13.p.rapidapi.com/search',
         params: {
-          keyword: 'Environment, Climate and Climate change',
+          keyword: 'Water Pollution',
           lr: 'en-US'
         },
         headers: {
@@ -274,13 +275,82 @@ app.use('/getReports', async(req, res)=>{
 
             }
         });
-        res.json(express.response.data);
+        res.json(response.data);
 
     }
-    catch{
+    catch(err){
+        res.status(500).send(err);
+    }
+});
 
+//Delete Reports
+
+app.use('/deleteReports/:documentId', async(req,res)=>{
+    try{
+        const documentId = req.params.documentId;
+        const response = await axios.delete(`https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/reports/${documentId}`,{
+            headers:{
+                "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325"
+
+            }
+        });
+        res.send("deleted sucessfully");
+    }
+    catch(err){
+        res.status(500).send(err);
     }
 })
+
+//Get Users
+
+app.use("/getUsers", async(req, res)=>{
+    try{
+        const response = await axios.get('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/users',{
+            headers:{
+                "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325"
+
+            }
+        });
+        res.json(response.data);
+    }
+    catch(err){
+        res.send(err);
+    }
+
+});
+
+//Add Users
+
+app.use("/addUsers", upload.single('image'), async(req, res)=>{
+    try{
+         
+        const usersData= req.body;
+        const imageBuffer = req.file.buffer;
+      
+      // Encode image buffer to base64
+      const base64Image = imageBuffer.toString('base64');
+  
+      // Add base64 image to product data
+      usersData.image = base64Image;
+        const response = await axios.post('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/users',
+        usersData,{
+            headers:{
+                "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325",
+                "Content-Type": "application/json"
+            }
+        });
+        res.json(response.data);
+        
+    }
+    catch(err){
+        res.status(500).send(err);
+
+    }
+});
+
+
+
+
 
 
 
