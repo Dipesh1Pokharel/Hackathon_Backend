@@ -332,7 +332,7 @@ app.use('/deleteReports/:documentId', async(req,res)=>{
 });
 
 //get users by useranme and password
-app.use('/getUsers/:username/:password', async (req, res)=>{
+app.use('/getUser/:username/:password', async (req, res)=>{
     try{
         const username = req.params.username;
         const password = req.params.password;
