@@ -207,7 +207,7 @@ app.post('/chatBot', async(req, res) => {
         url: 'https://open-ai21.p.rapidapi.com/conversationgpt35',
         headers: {
           'content-type': 'application/json',
-          'X-RapidAPI-Key': '143ed076admsh713fdc410f5912bp1941ccjsn02ae25de5938',
+          'X-RapidAPI-Key': '781dfa8245msha40a88a8e639a0fp13c657jsn087b9bb1d6cb',
           'X-RapidAPI-Host': 'open-ai21.p.rapidapi.com'
         },
         data: {
