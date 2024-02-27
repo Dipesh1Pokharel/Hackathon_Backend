@@ -38,7 +38,7 @@ app.use('/getProducts/:id', async (req, res)=>{
 });
 app.use('/getProducts', async (req, res)=>{
     try{
-        const response = await axios.get('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/market_place?page-size=3',
+        const response = await axios.get('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/market_place?page-size=20',
         {
             headers:{
                 "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325"
@@ -109,19 +109,10 @@ app.use('/deleteProducts/:documentId', async(req, res)=>{
 app.use('/updateProducts/:documentId', async (req, res)=>{
     try{
       const  documentId = req.params.documentId;
-         // Extract product data from request body
+       
       const updatedData = req.body;
       
-      // Extract image buffer from the request file
-    //   const imageBuffer = req.file.buffer;
       
-    //   // Encode image buffer to base64
-    //   const base64Image = imageBuffer.toString('base64');
-  
-    //   // Add base64 image to product data
-    //   updatedData.image = base64Image;
-  
-      // Send product data to DataStax database
         const response = await axios.put(`https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/market_place/${documentId}`,
          updatedData,
         {
@@ -137,6 +128,45 @@ app.use('/updateProducts/:documentId', async (req, res)=>{
         res.status(500).send("Internal Server Error.");
     }
 });
+
+//Call this endpoint to get current earnings
+
+app.use('/getEarnings', async(req, res)=>{
+    try{
+        
+        const response = await axios.get('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/market_place/35824570-fbc8-4736-bf80-6ccb6573d3e7',
+        {
+            headers:{
+                "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325"
+            }
+        });
+        res.json(response.data);
+
+    }
+    catch(err){
+        res.status(500).send("Internal Server Error.");
+    }
+
+})
+//Call this endpoint to chnange earnings....
+app.use('/addEarnings', async (req, res)=>{
+    
+    try{
+        const newEarning = req.body;
+        const response = await axios.put('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/market_place/35824570-fbc8-4736-bf80-6ccb6573d3e7',
+        newEarning, 
+        {
+            headers:{
+                "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325"
+
+            }
+        });
+        res.json(response.data);
+    }
+    catch(err){
+        res.send(err);
+    }
+})
 //api for events of environmenmt programss
 //change api
 
@@ -269,7 +299,7 @@ app.use('/report', upload.single('image') ,async(req, res)=>{
 
 app.use('/getReports', async(req, res)=>{
     try{
-        const response = await axios.get('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/reports?page-size=3', {
+        const response = await axios.get('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/reports?page-size=20', {
             headers:{
                 "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325"
 
@@ -305,7 +335,7 @@ app.use('/deleteReports/:documentId', async(req,res)=>{
 
 app.use("/getUsers", async(req, res)=>{
     try{
-        const response = await axios.get('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/users',{
+        const response = await axios.get('https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/users?page-size=20',{
             headers:{
                 "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325"
 
@@ -348,12 +378,33 @@ app.use("/addUsers", upload.single('image'), async(req, res)=>{
     }
 });
 
+//EDIT USERS
 
+app.use('/updateUsers/:documentId', async (req, res)=>{
+    try{
+      const  documentId = req.params.documentId;
+      const updatedData = req.body;
+      const imageBuffer = req.file.buffer;   
+      const base64Image = imageBuffer.toString('base64');
 
+        updatedData.image = base64Image;
+  
+      // Send product data to DataStax database
+        const response = await axios.put(`https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/users/${documentId}`,
+         updatedData,
+        {
+            headers:{
+                "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325",
+                "Content-Type": "application/json"
+            }
+        });
+        res.json(response.data);
 
-
-
-
+    }
+    catch(err){
+        res.status(500).send("Internal Server Error.");
+    }
+});
 
 
 
