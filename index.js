@@ -329,7 +329,26 @@ app.use('/deleteReports/:documentId', async(req,res)=>{
     catch(err){
         res.status(500).send(err);
     }
-})
+});
+
+//get users by useranme and password
+app.use('/getUsers/:username/:password', async (req, res)=>{
+    try{
+        const username = req.params.username;
+        const password = req.params.password;
+        const response = await axios.get(`https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/users?where=%7B%20%20%22username%22%3A%20%7B%20%20%20%20%22%24eq%22%3A%20%22${username}%22%20%20%7D%2C%20%20%22password%22%3A%20%7B%20%20%20%20%22%24eq%22%3A%20%22${password}%22%20%20%7D%7D&page-size=3`,
+        {
+            headers:{
+                "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325"
+
+            }
+        });
+        res.json(response.data);
+    }
+    catch(err){
+        res.send(err);
+    }
+});
 
 //Get Users
 
@@ -405,6 +424,8 @@ app.use('/updateUsers/:documentId', async (req, res)=>{
         res.status(500).send("Internal Server Error.");
     }
 });
+
+
 
 
 
