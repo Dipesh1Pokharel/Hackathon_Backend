@@ -170,18 +170,18 @@ app.use('/addEarnings', async (req, res)=>{
 //api for events of environmenmt programss
 //change api
 
-app.get('/api/events/:city', async(req, res) => {
-  const city = req.params.city;
+app.get('/api/events', async(req, res) => {
+//   const city = req.params.city;
   // console.log(name);
   const options = {
     method: 'GET',
     url: 'https://real-time-events-search.p.rapidapi.com/search-events',
     params: {
-      query: `Seminars and Programmes related to water pollution in ${city}`,
+      query: `Seminars and Programmes related to water pollution in Canada`,
       start: '0'
     },
     headers: {
-      'X-RapidAPI-Key': '143ed076admsh713fdc410f5912bp1941ccjsn02ae25de5938',
+      'X-RapidAPI-Key': '781dfa8245msha40a88a8e639a0fp13c657jsn087b9bb1d6cb',
       'X-RapidAPI-Host': 'real-time-events-search.p.rapidapi.com'
     }
   };
@@ -199,7 +199,7 @@ app.get('/api/events/:city', async(req, res) => {
 app.post('/chatBot', async(req, res) => {
     // const name = req.params.name;
     const prompt = JSON.stringify(req.body);
-    const data = "you are required to answer the questions related to only environment and climate"+ prompt;
+    const data = "Considering yourself as a environmental health specialist you are required to answer the questions in the way that it coincides with environmental health"+ prompt;
     
     // console.log(name);
     const options = {
@@ -207,7 +207,7 @@ app.post('/chatBot', async(req, res) => {
         url: 'https://open-ai21.p.rapidapi.com/conversationgpt35',
         headers: {
           'content-type': 'application/json',
-          'X-RapidAPI-Key': 'f8cd9c8bd9msh6e6d921717b0838p13ad61jsnc3c23603d782',
+          'X-RapidAPI-Key': '143ed076admsh713fdc410f5912bp1941ccjsn02ae25de5938',
           'X-RapidAPI-Host': 'open-ai21.p.rapidapi.com'
         },
         data: {
@@ -244,7 +244,7 @@ app.get("/api/news", async(req, res)=>{
         method: 'GET',
         url: 'https://google-news13.p.rapidapi.com/search',
         params: {
-          keyword: 'Water Pollution',
+          keyword: 'Water Pollution in Canada',
           lr: 'en-US'
         },
         headers: {
