@@ -128,7 +128,29 @@ app.use('/updateProducts/:documentId', async (req, res)=>{
         res.status(500).send("Internal Server Error.");
     }
 });
+//patch
+app.use('/patch/:id', async (req, res)=>{
+   
+   try{
+    const id = req.params.id;
+    const update = req.body;
+    const response = await axios.patch(`https://2243afd2-4437-4abf-a830-478abccb1d3f-us-east1.apps.astra.datastax.com/api/rest/v2/namespaces/document/collections/market_place/${id}`, 
+    update,
+    {
+        headers:{
+            "X-Cassandra-Token": "AstraCS:yjODPdZPFzxpapHYONHMOXmW:8072c8b56252e8e784d43454e35e861e0a899a9242e94aa8f5f0725b90b5f325",
+                "Content-Type": "application/json"
+        }
+        
+    });
+    res.json(response.data);
 
+   } 
+   catch(err){
+        res.send(err);
+   }
+
+});
 //Call this endpoint to get current earnings
 
 app.use('/getEarnings', async(req, res)=>{
