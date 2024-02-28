@@ -270,7 +270,7 @@ app.get("/api/news", async(req, res)=>{
           lr: 'en-US'
         },
         headers: {
-          'X-RapidAPI-Key': 'de64272d9dmsh23d51588da4d710p19c63djsn0ef6c7cfcd0f',
+          'X-RapidAPI-Key': 'd46e327e9dmsh0e42ec9fd43c7aep146004jsn271296d58203',
           'X-RapidAPI-Host': 'google-news13.p.rapidapi.com'
         }
       };
