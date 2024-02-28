@@ -203,7 +203,7 @@ app.get('/api/events', async(req, res) => {
       start: '0'
     },
     headers: {
-      'X-RapidAPI-Key': '781dfa8245msha40a88a8e639a0fp13c657jsn087b9bb1d6cb',
+      'X-RapidAPI-Key': 'de64272d9dmsh23d51588da4d710p19c63djsn0ef6c7cfcd0f',
       'X-RapidAPI-Host': 'real-time-events-search.p.rapidapi.com'
     }
   };
@@ -229,7 +229,7 @@ app.post('/chatBot', async(req, res) => {
         url: 'https://open-ai21.p.rapidapi.com/conversationgpt35',
         headers: {
           'content-type': 'application/json',
-          'X-RapidAPI-Key': '781dfa8245msha40a88a8e639a0fp13c657jsn087b9bb1d6cb',
+          'X-RapidAPI-Key': 'de64272d9dmsh23d51588da4d710p19c63djsn0ef6c7cfcd0f',
           'X-RapidAPI-Host': 'open-ai21.p.rapidapi.com'
         },
         data: {
@@ -270,7 +270,7 @@ app.get("/api/news", async(req, res)=>{
           lr: 'en-US'
         },
         headers: {
-          'X-RapidAPI-Key': '143ed076admsh713fdc410f5912bp1941ccjsn02ae25de5938',
+          'X-RapidAPI-Key': 'de64272d9dmsh23d51588da4d710p19c63djsn0ef6c7cfcd0f',
           'X-RapidAPI-Host': 'google-news13.p.rapidapi.com'
         }
       };
